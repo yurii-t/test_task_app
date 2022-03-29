@@ -104,18 +104,32 @@ class PhoneNumberFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
+  
   ) {
      
     
- 
-    if(oldValue.text.length>newValue.text.length){
+    
+   
+    var newText = newValue.text;
+    if ( oldValue.text.endsWith(') ') &&
+        oldValue.text.length == newValue.text.length + 1) {
+      newText = newText.substring(0, newText.length - 2);
       return TextEditingValue(
-        text: newValue.text.toString(),
-        selection: TextSelection.collapsed(offset: newValue.text.length),
+        text: newText.toString(),
+        selection: TextSelection.collapsed(offset: newText.length),
       );
     }
- 
-    var newText = newValue.text;
+
+    if ( oldValue.text.endsWith('-') &&
+        oldValue.text.length == newValue.text.length + 1) {
+      newText = newText.substring(0, newText.length - 1);
+      return TextEditingValue(
+        text: newText.toString(),
+        selection: TextSelection.collapsed(offset: newText.length),
+      );
+    }
+   
+   
     if (newText.length == 1) newText ="(" + newText;
     if (newText.length == 4) newText = newText + ") ";
     if (newText.length == 9) newText = newText + "-";
